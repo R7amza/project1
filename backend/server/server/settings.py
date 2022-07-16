@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # apps
     'apps.endpoints',
     'apps.ml',
+    'apps.ml2',
 ]
 
 
