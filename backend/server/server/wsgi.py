@@ -1,12 +1,3 @@
-"""
-WSGI config for server project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.0/howto/deployment/wsgi/
-"""
-
 # file backend/server/server/wsgi.py
 import os
 from django.core.wsgi import get_wsgi_application
@@ -15,35 +6,22 @@ application = get_wsgi_application()
 
 # ML registry
 import inspect
-from apps.ml2.registry import MLRegistry
-from apps.ml2.income_classifier.random_forest import RandomForestClassifier
-from apps.ml2.income_classifier.extra_trees import ExtraTreesClassifier # import ExtraTrees ML algorithm
+from apps.ml.registry import MLRegistry
+from apps.ml.startups_classifier.xgboost1 import XGBClassifier1
 
 try:
     registry = MLRegistry() # create ML registry
     # Random Forest classifier
-    rf = RandomForestClassifier()
+    xgb = XGBClassifier1()
     # add to ML registry
-    registry.add_algorithm(endpoint_name="income_classifier",
-                            algorithm_object=rf,
-                            algorithm_name="random forest",
+    registry.add_algorithm(endpoint_name="startups_classifier",
+                            algorithm_object=xgb,
+                            algorithm_name="XGBoost",
                             algorithm_status="production",
                             algorithm_version="0.0.1",
-                            owner="Piotr",
+                            owner="Reda",
                             algorithm_description="Random Forest with simple pre- and post-processing",
-                            algorithm_code=inspect.getsource(RandomForestClassifier))
-
-    # Extra Trees classifier
-    et = ExtraTreesClassifier()
-    # add to ML registry
-    registry.add_algorithm(endpoint_name="income_classifier",
-                            algorithm_object=et,
-                            algorithm_name="extra trees",
-                            algorithm_status="testing",
-                            algorithm_version="0.0.1",
-                            owner="Piotr",
-                            algorithm_description="Extra Trees with simple pre- and post-processing",
-                            algorithm_code=inspect.getsource(RandomForestClassifier))
+                            algorithm_code=inspect.getsource(XGBClassifier1))
 
 except Exception as e:
     print("Exception while loading the algorithms to the registry,", str(e))
